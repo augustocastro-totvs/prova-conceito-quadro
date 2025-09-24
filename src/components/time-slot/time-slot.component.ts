@@ -82,7 +82,7 @@ import { DragDropService } from '../../services/drag-drop.service';
         <div class="preview-content">
           <span *ngIf="allocation?.discipline">{{ allocation.discipline.name }}</span>
           <span *ngIf="allocation?.professors?.length" class="professor-count">
-            +{{ allocation.professors.length }} professor(s)
+            +{{ allocation.professors?.length }} professor(s)
           </span>
         </div>
       </div>
