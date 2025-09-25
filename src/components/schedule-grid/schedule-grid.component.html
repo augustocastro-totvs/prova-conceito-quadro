@@ -1,0 +1,56 @@
+<div class="schedule-container">
+    <div class="controls-panel">
+        <app-discipline-list [disciplines]="scheduleData?.disciplines || []"
+            [disciplineDropListId]="disciplineDropListId" [slotDropListIds]="getDisciplinesDropListIds()">
+        </app-discipline-list>
+        <app-professor-list [professors]="scheduleData?.professors || []" [professorDropListId]="professorDropListId"
+            [slotDropListIds]="getProfessorsDropListIds()"></app-professor-list>
+    </div>
+
+    <div class="grid-panel">
+        <div class="grid-header">
+            <h2 class="grid-title">Weekly Schedule</h2>
+            <div class="grid-actions">
+                <button class="refresh-btn" (click)="loadScheduleData()">
+                    🔄 Refresh
+                </button>
+            </div>
+        </div>
+
+        <div class="schedule-grid" *ngIf="scheduleData">
+            <!-- Time column header -->
+            <div class="time-header">Time</div>
+
+            <!-- Weekday headers -->
+            <div *ngFor="let weekday of scheduleData.weekdays" class="weekday-header"
+                [attr.data-weekday-id]="weekday.id">
+                <span class="weekday-name">{{ weekday.name }}</span>
+                <span class="weekday-short">{{ weekday.shortName }}</span>
+            </div>
+
+            <!-- Time slot rows -->
+            <ng-container *ngFor="let timeSlot of scheduleData.timeSlots">
+                <!-- Time label -->
+                <div class="time-label">
+                    <span class="start-time">{{ timeSlot.startTime }}</span>
+                    <span class="end-time">{{ timeSlot.endTime }}</span>
+                </div>
+
+                <!-- Time slots for each weekday -->
+                <app-time-slot *ngFor="let weekday of scheduleData.weekdays"
+                    [weekdayId]="weekday.id"
+                    [timeSlotId]="timeSlot.id" [timeSlot]="timeSlot" [allocation]="getAllocation(weekday.id, timeSlot.id)"
+                    [dropListIds]="getTimeSlotDropListIds()"
+                    [disciplines]="scheduleData.disciplines" [professors]="scheduleData.professors"
+                    (dropRequested)="handleDropRequest($event)" (allocationChanged)="handleAllocationChanged($event)">
+                </app-time-slot>
+            </ng-container>             
+        </div>
+
+        <!-- Loading state -->
+        <div *ngIf="!scheduleData" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading schedule data...</p>
+        </div>
+    </div>
+</div>

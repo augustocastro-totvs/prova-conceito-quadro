@@ -1,0 +1,178 @@
+.schedule-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 24px;
+  min-height: 100vh;
+}
+
+.controls-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grid-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+.grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f3f4f6;
+}
+
+.grid-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.grid-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.refresh-btn {
+  padding: 8px 16px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.refresh-btn:hover {
+  background: #2563eb;
+}
+
+.schedule-grid {
+  display: grid;
+  grid-template-columns: 80px repeat(var(--weekdays-count, 5), 1fr);
+  gap: 8px;
+  align-items: stretch;
+}
+
+.time-header {
+  grid-column: 1;
+  padding: 12px 8px;
+  font-weight: 600;
+  color: #374151;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weekday-header {
+  padding: 12px;
+  background: #3b82f6;
+  color: white;
+  text-align: center;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.weekday-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.weekday-short {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.time-label {
+  padding: 8px;
+  background: #f9fafb;
+  border-radius: 6px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-left: 3px solid #e5e7eb;
+}
+
+.start-time {
+  font-weight: 600;
+  color: #111827;
+  font-size: 12px;
+}
+
+.end-time {
+  color: #6b7280;
+  font-size: 10px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 20px;
+  color: #6b7280;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top: 3px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .schedule-container {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .controls-panel {
+    order: 2;
+  }
+
+  .grid-panel {
+    order: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .schedule-container {
+    padding: 16px;
+  }
+
+  .schedule-grid {
+    font-size: 12px;
+  }
+
+  .grid-title {
+    font-size: 20px;
+  }
+}

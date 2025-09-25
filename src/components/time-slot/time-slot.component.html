@@ -1,0 +1,48 @@
+<div class="time-slot" [class]="getSlotClasses()" cdkDropList 
+    [cdkDropListConnectedTo]="dropListIds"
+    [cdkDropListData]="{ weekdayId, timeSlotId }"
+    (cdkDropListDropped)="onDrop($event)" 
+    (cdkDropListEntered)="onDragEnter($event)"
+    (cdkDropListExited)="onDragExit($event)">
+
+    <!-- Empty State -->
+    <div *ngIf="slotState === AllocationState.EMPTY" class="empty-slot">
+        <span class="empty-text">Drop discipline here</span>
+    </div>
+
+    <!-- Discipline Only State -->
+    <div *ngIf="slotState === AllocationState.DISCIPLINE_ONLY && allocation?.discipline" class="discipline-only" cdkDrag
+        [cdkDragData]="createDragData('allocation', allocation!)">
+        <div class="discipline-header" [style.background-color]="allocation!.discipline!.color">
+            <span class="discipline-name">{{ allocation!.discipline!.name }}</span>
+            <span class="discipline-code">{{ allocation!.discipline!.code }}</span>
+        </div>
+        <div class="professor-placeholder">
+            <span class="placeholder-text">Drop professors here</span>
+        </div>
+    </div>
+
+    <!-- Discipline with Professors State -->
+    <div *ngIf="slotState === AllocationState.DISCIPLINE_WITH_PROFESSORS && allocation?.discipline"
+        class="discipline-with-professors" cdkDrag [cdkDragData]="createDragData('allocation', allocation!)">
+        <div class="discipline-header" [style.background-color]="allocation!.discipline!.color">
+            <span class="discipline-name">{{ allocation!.discipline!.name }}</span>
+            <span class="discipline-code">{{ allocation!.discipline!.code }}</span>
+        </div>
+        <div class="professors-list">
+            <div *ngFor="let professor of allocation!.professors" class="professor-item">
+                <span class="professor-name">{{ professor.name }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drag Preview -->
+    <div class="drag-preview" *cdkDragPreview>
+        <div class="preview-content">
+            <span *ngIf="allocation?.discipline">{{ allocation!.discipline!.name }}</span>
+            <span *ngIf="allocation?.professors?.length" class="professor-count">
+                +{{ allocation!.professors?.length }} professor(s)
+            </span>
+        </div>
+    </div>
+</div>

@@ -25,6 +25,7 @@ export interface TimeSlot {
   startTime: string;
   endTime: string;
   order: number;
+  slotState?: AllocationState;
 }
 
 export interface Allocation {

@@ -1,0 +1,36 @@
+<div class="discipline-list">
+  <h3 class="list-title">Available Disciplines</h3>
+  <div class="list-container"
+       cdkDropList
+       [id]="disciplineDropListId"
+       [cdkDropListData]="disciplines"
+       [cdkDropListConnectedTo]="slotDropListIds"
+       (cdkDropListDropped)="onDrop($event)">
+
+    <div *ngFor="let discipline of disciplines"
+         class="discipline-item"
+         cdkDrag
+         [cdkDragData]="createDragData(discipline)"
+         [style.border-left-color]="discipline.color">
+
+      <div class="discipline-info">
+        <span class="discipline-name">{{ discipline.name }}</span>
+        <span class="discipline-code">{{ discipline.code }}</span>
+      </div>
+
+      <div class="discipline-duration">
+        {{ discipline.duration }}min
+      </div>
+
+      <div class="drag-handle">⋮⋮</div>
+
+      <!-- Custom drag preview -->
+      <div class="drag-preview" *cdkDragPreview>
+        <div class="preview-discipline" [style.background-color]="discipline.color">
+          <span class="preview-name">{{ discipline.name }}</span>
+          <span class="preview-code">{{ discipline.code }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
