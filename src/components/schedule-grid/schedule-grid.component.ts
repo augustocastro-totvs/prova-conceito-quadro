@@ -214,8 +214,9 @@ export class ScheduleGridComponent implements OnInit, OnDestroy {
     let possibleDropIds: string[] = [];
 
     this.scheduleData?.timeSlots.forEach(timeSlot => {
-      timeSlot.slotState === AllocationState.EMPTY ? possibleDropIds.push(timeSlot.id) : null;
+      timeSlot.slotState === AllocationState.EMPTY ? possibleDropIds.push(`timeSlot_${timeSlot!.id}_${timeSlot!.weekdayId}`) : null;
     });
+    console.log(possibleDropIds);
     return possibleDropIds;
   }
 
@@ -223,7 +224,7 @@ export class ScheduleGridComponent implements OnInit, OnDestroy {
     let possibleDropIds: string[] = [];
 
     this.scheduleData?.timeSlots.forEach(timeSlot => {
-      timeSlot.slotState !== AllocationState.EMPTY ? possibleDropIds.push(timeSlot.id) : null;
+      timeSlot.slotState !== AllocationState.EMPTY ? possibleDropIds.push(`timeSlot_${timeSlot!.id}_${timeSlot!.weekdayId}`) : null;
     });
     return possibleDropIds;
   }

@@ -66,12 +66,12 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
   constructor(private dragDropService: DragDropService) {}
 
   ngOnInit(): void {
-    this.setTimeSlotState();
+    this.setTimeSlotProperties();
     this.dragDropService.dragData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.dragData = data;
-        this.setTimeSlotState();
+        this.setTimeSlotProperties();
       });
   }
 
@@ -80,7 +80,8 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  public setTimeSlotState() {
+  public setTimeSlotProperties() {
+    this.timeSlot!.weekdayId = this.weekdayId;
     this.timeSlot!.slotState = this.slotState;
   }
 
@@ -145,5 +146,9 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
         targetTimeSlotId: this.timeSlotId
       });
     }
+  }
+
+  public getSlotId(): string {
+    return `timeSlot_${this.timeSlot!.id}_${this.timeSlot!.weekdayId}`;
   }
 }

@@ -25,6 +25,7 @@ export interface TimeSlot {
   startTime: string;
   endTime: string;
   order: number;
+  weekdayId?: string;
   slotState?: AllocationState;
 }
 

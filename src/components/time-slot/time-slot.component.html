@@ -1,4 +1,5 @@
-<div class="time-slot" [class]="getSlotClasses()" cdkDropList 
+<div class="time-slot" [class]="getSlotClasses()" cdkDropList
+    [id]="getSlotId()"
     [cdkDropListConnectedTo]="dropListIds"
     [cdkDropListData]="{ weekdayId, timeSlotId }"
     (cdkDropListDropped)="onDrop($event)" 
