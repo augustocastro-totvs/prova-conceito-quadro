@@ -65,14 +65,18 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
 
   constructor(private dragDropService: DragDropService) {}
 
-  ngOnInit(): void {
-    this.setTimeSlotProperties();
+  ngOnInit(): void { 
+    
     this.dragDropService.dragData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.dragData = data;
-        this.setTimeSlotProperties();
+        
       });
+  }
+
+  ngAfterViewInit(): void {
+    
   }
 
   ngOnDestroy(): void {
@@ -81,7 +85,6 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
   }
 
   public setTimeSlotProperties() {
-    this.timeSlot!.weekdayId = this.weekdayId;
     this.timeSlot!.slotState = this.slotState;
   }
 
@@ -123,7 +126,6 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
 
   onDragEnter(event: CdkDragEnter): void {
     this.isDragOver = true;
-    console.log(event.item);
   }
 
   onDragExit(event: CdkDragExit): void {
@@ -149,6 +151,6 @@ export class TimeSlotComponent implements OnInit, OnDestroy {
   }
 
   public getSlotId(): string {
-    return `timeSlot_${this.timeSlot!.id}_${this.timeSlot!.weekdayId}`;
+    return `timeSlot_${this.timeSlotId}_${this.weekdayId}`;
   }
 }

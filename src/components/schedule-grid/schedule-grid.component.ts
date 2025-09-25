@@ -3,7 +3,8 @@ import {
   OnInit,
   OnDestroy,
   ChangeDetectionStrategy,
-  ChangeDetectorRef
+  ChangeDetectorRef,
+  ViewChildren
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
@@ -15,7 +16,8 @@ import {
   AllocationRequest,
   Discipline,
   Professor,
-  AllocationState
+  AllocationState,
+  TimeSlot
 } from '../../models/schedule.models';
 import { ScheduleService } from '../../services/schedule.service';
 import { DragDropService } from '../../services/drag-drop.service';
@@ -33,12 +35,15 @@ import { CdkDropList } from "@angular/cdk/drag-drop";
     DisciplineListComponent,
     ProfessorListComponent,
     CdkDropList
-],
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './schedule-grid.component.html',
   styleUrls: ['./schedule-grid.component.scss']
 })
 export class ScheduleGridComponent implements OnInit, OnDestroy {
+
+  @ViewChildren(TimeSlotComponent) timeSlotComponents: TimeSlotComponent[] = [];
+
   scheduleData: ScheduleGridData | null = null;
 
   private destroy$ = new Subject<void>();
@@ -59,6 +64,7 @@ export class ScheduleGridComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
         this.scheduleData = data;
+        this.scheduleService.setAdditionalProperties(this.scheduleData);
         this.cdr.markForCheck();
       });
   }
@@ -210,27 +216,37 @@ export class ScheduleGridComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  public getDisciplinesDropListIds(): string[]{
+  public getDisciplinesDropListIds(): string[] {
     let possibleDropIds: string[] = [];
+    let timeSlots = this.scheduleData?.timeSlots.map(timeSlot => timeSlot.id) || [];
+    let weekDays = this.scheduleData?.weekdays.map(weekday => weekday.id) || [];
 
-    this.scheduleData?.timeSlots.forEach(timeSlot => {
-      timeSlot.slotState === AllocationState.EMPTY ? possibleDropIds.push(`timeSlot_${timeSlot!.id}_${timeSlot!.weekdayId}`) : null;
-    });
-    console.log(possibleDropIds);
-    return possibleDropIds;
-  }
-
-  public getProfessorsDropListIds(): string[]{
-    let possibleDropIds: string[] = [];
-
-    this.scheduleData?.timeSlots.forEach(timeSlot => {
-      timeSlot.slotState !== AllocationState.EMPTY ? possibleDropIds.push(`timeSlot_${timeSlot!.id}_${timeSlot!.weekdayId}`) : null;
+    timeSlots.forEach(timeSlotId => {
+      weekDays.forEach(weekdayId => {
+        if (!this.getAllocation(weekdayId, timeSlotId))
+          possibleDropIds.push(`timeSlot_${timeSlotId}_${weekdayId}`);
+      });
     });
     return possibleDropIds;
   }
-  
-  public getTimeSlotDropListIds(): string[]{
-    let possibleDropIds: string[] = []; 
+
+  public getProfessorsDropListIds(): string[] {
+    let possibleDropIds: string[] = [];
+    let timeSlots = this.scheduleData?.timeSlots.map(timeSlot => timeSlot.id) || [];
+    let weekDays = this.scheduleData?.weekdays.map(weekday => weekday.id) || [];
+
+    timeSlots.forEach(timeSlotId => {
+      weekDays.forEach(weekdayId => {
+        if (this.getAllocation(weekdayId, timeSlotId))
+          possibleDropIds.push(`timeSlot_${timeSlotId}_${weekdayId}`);
+      });
+    });
+
+    return possibleDropIds;
+  }
+
+  public getTimeSlotDropListIds(): string[] {
+    let possibleDropIds: string[] = [];
     possibleDropIds = [...'professorList', ...'disciplineList'];
     return possibleDropIds;
   }

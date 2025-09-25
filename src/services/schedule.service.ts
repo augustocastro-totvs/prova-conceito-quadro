@@ -8,13 +8,28 @@ import {
   Discipline, 
   Professor, 
   Weekday, 
-  TimeSlot 
+  TimeSlot, 
+  AllocationState
 } from '../models/schedule.models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScheduleService {
+  setAdditionalProperties(scheduleData: ScheduleGridData | null) {
+    console.log('scheduleData', scheduleData);
+    let timeSlotIds: string[] =  scheduleData?.allocations.map(allocation => allocation.timeSlotId) || [];
+
+    scheduleData?.timeSlots.forEach(timeSlot => {
+      timeSlot.slotState = timeSlotIds.includes(timeSlot.id) ? AllocationState.DISCIPLINE_ONLY : AllocationState.EMPTY;
+      if(timeSlotIds.includes(timeSlot.id)) {
+        let allocation = scheduleData.allocations.find(allocation => allocation.timeSlotId === timeSlot.id);
+        timeSlot.slotState = (allocation?.professors?.length ?? 0) > 0 ? 
+          AllocationState.DISCIPLINE_WITH_PROFESSORS 
+        : AllocationState.DISCIPLINE_ONLY;
+      }      
+    });
+  }
   private scheduleDataSubject = new BehaviorSubject<ScheduleGridData | null>(null);
   public scheduleData$ = this.scheduleDataSubject.asObservable();
 
