@@ -10,8 +10,8 @@ import { ScheduleGridComponent } from './components/schedule-grid/schedule-grid.
     <div class="app-container">
       <header class="app-header">
         <div class="header-content">
-          <h1 class="app-title">University Scheduling System</h1>
-          <p class="app-subtitle">Drag and drop disciplines and professors to create schedules</p>
+          <h1 class="app-title">Prova de Conceito Quadro de Horários</h1>
+          <p class="app-subtitle">Arraste e solte disciplinas para criar alocações</p>
         </div>
       </header>
       

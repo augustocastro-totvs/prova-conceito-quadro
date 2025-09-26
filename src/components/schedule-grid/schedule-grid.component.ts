@@ -245,9 +245,22 @@ export class ScheduleGridComponent implements OnInit, OnDestroy {
     return possibleDropIds;
   }
 
+  private getAllTimeSlotsIds(): string[] {
+    let possibleDropIds: string[] = [];
+    let timeSlots = this.scheduleData?.timeSlots.map(timeSlot => timeSlot.id) || [];
+    let weekDays = this.scheduleData?.weekdays.map(weekday => weekday.id) || [];
+
+    timeSlots.forEach(timeSlotId => {
+      weekDays.forEach(weekdayId => {
+        possibleDropIds.push(`timeSlot_${timeSlotId}_${weekdayId}`);
+      });
+    });
+    return possibleDropIds;
+  }
+
   public getTimeSlotDropListIds(): string[] {
     let possibleDropIds: string[] = [];
-    possibleDropIds = [...'professorList', ...'disciplineList'];
+    possibleDropIds = [...'professorList', ...'disciplineList', ...this.getAllTimeSlotsIds()];
     return possibleDropIds;
   }
 }
